@@ -151,50 +151,57 @@
     </ul>
 
     <script>
-      var visibilityChanger = function(element_id) {
-        return function(visible) {
-          document.getElementById(element_id).style.display = visible ? 'block' : 'none';
-        }
-      }
+      // var visibilityChanger = function(element_id) {
+      //   return function(visible) {
+      //     document.getElementById(element_id).style.display = visible ? 'block' : 'none';
+      //   }
+      // }
 
-      var showLoadingIndicator = visibilityChanger("running")
-      var showOpenButton = visibilityChanger("tab_open_pdf")
+      // var showLoadingIndicator = visibilityChanger("running")
+      // var showOpenButton = visibilityChanger("tab_open_pdf")
 
-      var appendOutput = function(msg) {
-        var output = document.getElementById("output");
+      // var appendOutput = function(msg) {
+      //   var output = document.getElementById("output");
 
-        var content = output.textContent;
+      //   var content = output.textContent;
 
-        output.textContent = content + "\r\n" + msg;
+      //   output.textContent = content + "\r\n" + msg;
 
-        output.scrollTop = 999999;
-        console.log(msg);
-      }
+      //   output.scrollTop = 999999;
+      //   console.log(msg);
+      // }
 
       var pdf_dataurl = undefined;
       var compile = function(source_code) {
+        var source_code = "" +
+                    "\\documentclass{article}" +
+                    "\\begin{document}" +
+                    "\\LaTeX is great!" +
+                    "$E = mc^2$" +
+                    "\\end{document}";
         document.getElementById("output").textContent = "";
-        showLoadingIndicator(true);
+        //showLoadingIndicator(true);
         window.location.href = "#running";
 
         var pdftex = new PDFTeX();
         pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
           pdftex.FS_createLazyFile('/', 'snowden.jpg', 'snowden.jpg', true, true);
 
-          pdftex.on_stdout = appendOutput;
-          pdftex.on_stderr = appendOutput;
+          // pdftex.on_stdout = appendOutput;
+          // pdftex.on_stderr = appendOutput;
 
           console.time("Execution time");
 
           pdftex.compile(source_code).then(function(pdf_dataurl) {
             console.timeEnd("Execution time");
 
-            showLoadingIndicator(false);
+            //showLoadingIndicator(false);
 
             if (pdf_dataurl === false)
               return;
 
-            showOpenButton(true);
+            window.open(pdf_dataurl);
+            //showOpenButton(true);
             window.location.href = "#open_pdf";
             document.getElementById("open_pdf_btn").focus();
           });
