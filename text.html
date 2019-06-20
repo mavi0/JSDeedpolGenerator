@@ -98,7 +98,8 @@
         <div class="container">
             <h1>Deedpol Generator</h1>
             <p>Enter your details and press generate to create your deedpol</p>
-            <form id="subjectDetails"  onsubmit="return loadVars()">
+            <!-- <form id="subjectDetails"  onsubmit="return loadVars()"> -->
+            <form id="subjectDetails">
                 Old name: <br><input type="text" id="oldName"><br>
                 New name: <br><input type="text" id="newName"><br>
                 Street Address: <br><input type="text" id="streetAddress"><br>
@@ -112,6 +113,87 @@
         </div>
 
         <script>
+            // var visibilityChanger = function(element_id) {
+            //   return function(visible) {
+            //     document.getElementById(element_id).style.display = visible ? 'block' : 'none';
+            //   }
+            // }
+      
+            // var showLoadingIndicator = visibilityChanger("running")
+            // var showOpenButton = visibilityChanger("tab_open_pdf")
+      
+            // var appendOutput = function(msg) {
+            //   var output = document.getElementById("output");
+      
+            //   var content = output.textContent;
+      
+            //   output.textContent = content + "\r\n" + msg;
+      
+            //   output.scrollTop = 999999;
+            //   console.log(msg);
+            // }
+      
+            var pdf_dataurl = undefined;
+            var compile = function(source_code) {
+              var latex_code = "";
+      
+              var client = new XMLHttpRequest();
+              client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
+              client.send(null);
+              if (client.status === 200) {
+                  latex_code = client.responseText;
+              }
+              console.log(source_code)
+              console.log("GAP!!")
+              console.log(latex_code)
+      
+              source_code = latex_code;
+              // document.getElementById("output").textContent = "";
+              //showLoadingIndicator(true);
+              // window.location.href = "#running";
+      
+              var pdftex = new PDFTeX();
+              pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
+                // pdftex.FS_createLazyFile('/', 'snowden.jpg', 'snowden.jpg', true, true);
+      
+                // pdftex.on_stdout = appendOutput;
+                // pdftex.on_stderr = appendOutput;
+      
+                // console.time("Execution time");
+      
+                pdftex.compile(source_code).then(function(pdf_dataurl) {
+                  // console.timeEnd("Execution time");
+      
+                  //showLoadingIndicator(false);
+      
+                  // if (pdf_dataurl === false)
+                    // return;
+      
+                  window.open(pdf_dataurl);
+                  //showOpenButton(true);
+                  // window.location.href = "#open_pdf";
+                  // document.getElementById("open_pdf_btn").focus();
+                });
+              });
+            }
+      
+            document.getElementById("submit").addEventListener("click", function(e) {
+            //   var source_code = document.getElementById("input").value;
+              compile("source_code");
+            });
+      
+            // document.getElementById("open_pdf_btn").addEventListener("click", function(e) {
+            //   window.open(pdf_dataurl);
+            //   e.preventDefault();
+            // });
+      
+            var pdftex_preload = new PDFTeX("pdftex-worker.js");
+            pdftex_preload = undefined;
+          </script>
+
+
+
+        <!-- <script>
             
             // var visibilityChanger = function(element_id) {
                 //   return function(visible) {
@@ -265,14 +347,8 @@
                     
                 
                 var getLatex = function() {
-                    var client = new XMLHttpRequest();
-                        client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex');
-                        client.onreadystatechange = function() {
-                            return client.responseText;
-                        }
-                        client.send();
+                    
                 }
-
 
                 
                 var pdf_dataurl = undefined;
@@ -288,21 +364,28 @@
                     var numberDate = parseDate(date);
                     var textDate = parseTextDate(date);
 
-                    var source_latex = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
+                    //var source_latex = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
                     alert(textDate)
 
+                    var source_latex = "";
+                    var client = new XMLHttpRequest();
+                        client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
+                        client.send(null);
+                        if (client.status === 200) {
+                            source_latex = client.responseText;
+                        }
+                    console.log(source_latex);
+
                     var pdftex = new PDFTeX();
-                    var latex_code = getLatex();
-                    console.log(latex_code);
-                    
-                    pdftex.compile(latex_code).then(function(pdf) { window.open(pdf) }); 
-                    pdftex.on_stdout = logOutput;
-                    pdftex.on_stderr = logOutput;
-                
+                    pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
+                        pdftex.compile(source_latex).then(function(pdf_dataurl) {
+                            window.open(pdf_dataurl);
+                        });
+                    });
                 }
                 var pdftex_preload = new PDFTeX("pdftex-worker.js");
                 pdftex_preload = undefined;
-              </script>
+              </script> -->
 
               <!-- <script>
                // var visibilityChanger = function(element_id) {

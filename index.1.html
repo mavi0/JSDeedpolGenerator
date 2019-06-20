@@ -1,374 +1,256 @@
 <!doctype html>
 <html>
   <head>
-    <style>
-      html {
-        font-family: Arial;
-      }
+    <meta charset="utf-8">
+        <title>Deedpol Generator</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1"/> 
+        <meta name="viewport" content="width=device-width" />
+        <style>
 
-      textarea {
-        font-family: monospace;
-        width: 100%;
-      }
+            @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed&display=swap');
 
-      code {
-        background: #eee;
-      }
+            ::-moz-selection {
+                background: #b3d4fc;
+                text-shadow: none;
+            }
 
-      code .string {
-        color: rgb(102, 153, 0);
-      }
+            ::selection {
+                background: #b3d4fc;
+                text-shadow: none;
+            }
 
-      code .keyword {
-        color: rgb(0, 119, 170);
-      }
-    </style>
+            html {
+                padding: 30px 10px;
+                font-size: 20px;
+                line-height: 1.4;
+                color: #737373;
+                background: #ecf0f1;
+            }
 
+            html {
+                padding: 30px 10px;
+                font-size: 20px;
+                color: #737373;
+                background: #ecf0f1;
+            }
+
+            body {
+                max-width: 500px;
+                _width: 500px;
+                padding: 30px 20px 50px;
+                border: 1px solid #b3b3b3;
+                border-radius: 4px;
+                margin: 0 auto;
+                box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+                background: #fcfcfc;
+            }
+
+            h1 {
+                margin: 0 10px;
+                font-size: 50px;
+                text-align: center;
+                font-family: 'Roboto Condensed', sans-serif;
+            }
+
+            h3 {
+                margin: 1.5em 0 0.5em;
+            }
+
+            p {
+                margin: 1em 0;
+                font-family: 'Roboto', sans-serif;
+                text-align: left;
+                font-size: 20px;
+            }
+
+            ul {
+                padding: 0 0 0 40px;
+                margin: 1em 0;
+            }
+
+            a {
+                text-align: center;
+                color: #d64937;
+            }
+
+            a:hover{
+                color: #bbb;
+            }
+
+            .container {
+                max-width: 400px;
+                _width: 380px;
+                margin: 0 auto;
+            }
+
+            #subjectDetails {
+                font-family: 'Roboto', sans-serif;
+                text-align: left;
+                font-size: 20px;
+            }
+
+        </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-    <!-- <script type="text/javascript">
-    /* <![CDATA[ */
-        // flattr button
-        (function() {
-            var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
-            t.parentNode.insertBefore(s, t);
-        })();
-    /* ]]> */</script> -->
   </head>
 
   <body>
     <script src="promisejs/promise.js"></script>
     <script src="pdftex.js"></script>
-<!-- 
-    <h1>texlive.js – A LaTeX Compiler for Javascript</h1>
-    <a href="https://github.com/manuels/texlive.js/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
-    <h2>
-      Usage
-    </h2>
-    <code style="width: 55em; margin: 0 auto; padding: 1em; display: block">
-      <span class="keyword">var</span> pdftex = <span class="keyword">new</span> PDFTeX();<br />
-      <span class="keyword">var</span> latex_code = <span class="string">""</span> + <br />
-      <span class="string">&nbsp;&nbsp;"\\documentclass{article}"</span> + <br />
-      <span class="string">&nbsp;&nbsp;"\\begin{document}"</span> + <br />
-      <span class="string">&nbsp;&nbsp;"\\LaTeX is great!"</span> + <br />
-      <span class="string">&nbsp;&nbsp;"$E = mc^2$"</span> + <br />
-      <span class="string">&nbsp;&nbsp;"\\end{document}"</span>;
-      <br /><br />
-      pdftex.compile(latex_code)<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.then(<span class="keyword">function</span>(pdf) {
-        window.open(pdf)
-      });
-    </code> -->
+    <div class="container">
+      <h1>Deedpol Generator</h1>
+      <p>Enter your details and press generate to create your deedpol</p>
+      <!-- <form id="subjectDetails"  onsubmit="return loadVars()"> -->
+      <form id="subjectDetails">
+          Old name: <br><input type="text" id="oldName"><br>
+          New name: <br><input type="text" id="newName"><br>
+          Street Address: <br><input type="text" id="streetAddress"><br>
+          City: <br><input type="text" id="city"><br>
+          County: <br><input type="text" id="county"><br>
+          Postcode: <br><input type="text" id="postcode"><br>
+          Date: <br><input type="date" id="date"><br>
+      <input type="submit" value="Submit" id="submit">
+      </form>
 
-    <div id="tabs">
-      <div class="tab" id="tab_input">
-        <h2>
-          Demo
-        </h2>
-        <h3>
-          LaTeX Input
-        </h3>
-        <button id="compile" autofocus>Compile this LaTeX code to a PDF</button>
-        <a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://github.com/manuels/texlive.js"></a>
-
-        <button onclick="TogetherJS(this); return false;">Start Collaboration Mode</button>
-        <textarea rows="30" id="input">
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          %EDIT THESE VARIABLES!
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          \newcommand{\newname}{NEW NAME}
-          \newcommand{\oldname}{OLD NAME}
-          \newcommand{\streetaddress}{123 Carenden Road}
-          \newcommand{\city}{London}
-          \newcommand{\postcode}{SE1 7XG}
-          \newcommand{\county}{Surrey}
-          \newcommand{\worddate}{6th day of November in the year 2010}
-          \newcommand{\numberdate}{06/11/2010}
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          %Now press "Recompile" or Ctrl+Enter
-          %Press the download button for a PDF (Next to the Recompile button)
-          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          
-          \documentclass[10pt, twoside, a4paper]{article}
-          \usepackage{hyperref}
-          \usepackage{geometry}
-          \usepackage{multicol}
-          % \usepackage{nth}
-          \usepackage{enumerate}
-          \usepackage{pdfrender}
-          
-          % Preamble
-          \pdfrender{StrokeColor=black,TextRenderingMode=2,LineWidth=0.1pt}
-          
-          % hyperref Setup (Requires hyperref package)
-          \hypersetup{
-             pdfauthor   =   \newname,
-             pdftitle    =   Deed of Change of Name,
-             pdfsubject  =   Deed Poll for \newname,
-           }
-          
-          % Set Margin Sizes (Requires geometry package)
-          \geometry{inner = 20mm, outer = 20mm, bottom = 20mm, top = 20mm}
-          
-          % Supress name hyphenation
-          \hyphenation{\newname}
-          \hyphenation{\oldname}
-          
-          % Body
-          \begin{document}
-          \pagenumbering{none} % turn off visible page numbering
-          
-          % Title
-          {
-            \centering
-          
-            \Huge
-            \scshape
-            Deed of Change of Name
-          
-            \vspace{14pt}
-          
-            \hrule
-          
-            \par
-          }
-          
-          \vspace{48pt}
-          
-          \noindent{\scshape By this Deed of Change of Name} made by myself the undersigned \textbf{\newname} of \streetaddress, \city, \postcode, in the county of \county, formerly known as \textbf{\oldname}, a British Citizen under section 1(1) of the British Nationality Act 1981
-          
-          \vspace{10pt}
-          
-          \noindent{\scshape I Hereby declare as follows:}
-          
-          \vspace{8pt}
-          
-          \begin{enumerate}[I.]
-              \item I ABSOLUTELY and entirely renounce, relinquish, and abandon the use of my said former name \textbf{\oldname} and assume, adopt, and determine to take and use from the date hereof the name of \textbf{\newname} in substitution for my former name of \textbf{\oldname}.
-            
-              \item I SHALL AT ALL TIMES hereafter in all records, deeds,	documents, and other writings and in all actions and proceedings, as well as in all dealings and transactions, and on all occasions	whatsoever use and subscribe the said name of \textbf{\newname} as my name, in substitution for my former name of \textbf{\oldname} so relinquished as aforesaid to the intent that I may hereafter be called, known, or distinguished not by the former name of \textbf{\oldname} but by the name \textbf{\newname}.
-            
-              \item I AUTHORISE AND REQUIRE all persons at all times to
-            designate, describe, and address me by the adopted name of
-            \textbf{\newname}
-          
-          \end{enumerate}
-          
-          \vspace{10pt}
-          
-          \noindent{\scshape In witness} whereof I have hereunto subscribed my adopted and
-          substituted name of \textbf{\newname} and also my said former name of
-          \textbf{\oldname}.
-          
-          \vspace{10pt}
-          
-          \noindent Notwithstanding the decision of Mr Justice Vaisey in \textit{Re} Parrott, Cox
-          \textit{v} Parrott [1946] Ch 183, the applicant wishes the enrolment to proceed.
-          
-          \vspace{24pt}
-          
-          {
-            \scshape
-            \noindent Signed as a Deed this \worddate  \space (\numberdate)
-          }
-          
-          \vspace{48pt}
-          
-          \begin{multicols}{2}
-          
-            \par\noindent\hrule
-            \vspace{14pt}
-          
-            {
-              \centering
-              \noindent
-              by the above name \textbf{\scshape{\newname}}
-              \par
-            }
-          
-            \vspace{60pt}
-          
-            {\scshape \noindent Witness 1:}
-          
-            \vspace{48pt}
-            \par\noindent\hrule
-            \vspace{14pt}
-          
-            {
-              \scshape
-          
-              \noindent Name: \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt}
-          
-              \vspace{12pt}
-          
-              \noindent Address:
-          
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt} \\ \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt} \\ \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt}
-            }
-          
-            \columnbreak
-          
-            \par\noindent\hrule
-            \vspace{14pt}
-          
-            {
-              \centering
-              \noindent
-              by the above name \textbf{\scshape{\oldname}}
-              \par
-            }
-          
-            \vspace{60pt}
-          
-            {\scshape \noindent Witness 2:}
-          
-            \vspace{48pt}
-            \par\noindent\hrule
-            \vspace{14pt}
-          
-            {
-              \scshape
-          
-              \noindent Name: \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt}
-          
-              \vspace{12pt}
-          
-              \noindent Address:
-          
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt} \\ \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt} \\ \\
-              \noindent\hspace*{4em}\rule{0.35\textwidth}{0.5pt}
-            }
-          
-          \end{multicols}
-          
-          \end{document}
-        </textarea>
-      </div>
-
-
-      <div class="tab" id="tab_output">
-        <h3>Console Output</h3>
-
-        <pre id="output" style="overflow: scroll; max-height: 300px">
-        Click "Compile this LaTeX code to PDF" at the top of this page and watch the console output here.
-        </pre>
-
-        <a name="running" id="running" style="display: none">
-          Compiling…
-          <img src="loading.gif" />
-        </a>
-      </div>
-
-      <div class="tab" id="tab_open_pdf" style="display: none">
-        <h3>View your PDF</h3>
-
-        <button id="open_pdf_btn">Open your PDF</button>
-        <p>
-          Your LaTeX code is now compiled to a PDF document. The document is converted to a <a href="https://developer.mozilla.org/en-US/docs/data_URIs">data URI</a> that makes it possible to interpret the format correctly.
-        </p>
-        <a name="open_pdf"></a>
-      </div>
-
-    </div>
-
-    <!-- <h2>License</h2>
-    <p>GNU/GPL</p>
-
-    <h2>More Information</h2>
-    <p>Checkout the <a href="https://github.com/manuels/texlive.js/wiki">wiki page</a></p>
-
-    <h2>Related Projects</h2>
-    <ul>
-      <li><a href="https://github.com/mozilla/pdf.js">pdf.js</a>: a PDF reader in Javascript by Mozilla</li>
-      <li><a href="https://github.com/kripken/emscripten">emscripten</a>: An LLVM-to-JavaScript Compiler used to create texlive.js</li>
-    </ul> -->
+  </div>
 
     <script>
-      // var visibilityChanger = function(element_id) {
-      //   return function(visible) {
-      //     document.getElementById(element_id).style.display = visible ? 'block' : 'none';
-      //   }
-      // }
 
-      // var showLoadingIndicator = visibilityChanger("running")
-      // var showOpenButton = visibilityChanger("tab_open_pdf")
+      var parseTextDate = function(date) {
+        // alert(date)
+        var month = date.getMonth();
+        var day = String(date.getDate());
+        const year = String(date.getFullYear());
 
-      // var appendOutput = function(msg) {
-      //   var output = document.getElementById("output");
+        var suffix = "th";
+        var textMonth = ""
 
-      //   var content = output.textContent;
+        if (day == 1 || day == 21 || day == 31) suffix = "st";
+        if (day == 2 || day == 22) suffix = "nd";
+        if (day == 3 || day == 23) suffix = "rd";
+        
+        switch (month) {
+            case 0:
+                textMonth = "January";
+                break;
+            case 1:
+                textMonth = "February";
+                break;
+            case 2:
+                textMonth = "March";
+                break;
+            case 3:
+                textMonth = "April";
+                break;
+            case 4:
+                textMonth = "May";
+                break;
+            case 5:
+                textMonth = "June";
+                break;
+            case 6:
+                textMonth = "July";
+                break;
+            case 7: 
+                textMonth = "August";
+                break;
+            case 8:
+                textMonth = "September";
+                break;
+            case 9:
+                textMonth = "October";
+                break;
+            case 10:
+                textMonth = "November";
+                break;
+            case 11:
+                textMonth = "December";
+        }
 
-      //   output.textContent = content + "\r\n" + msg;
+        return `${day}${suffix} day of ${textMonth} in the year ${year}`;
+    }
+    
+    var parseDate = function(date) {
+        // alert(date)
+        var month = String(date.getMonth() + 1);
+        var day = String(date.getDate());
+        const year = String(date.getFullYear());
 
-      //   output.scrollTop = 999999;
-      //   console.log(msg);
-      // }
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
 
-      var pdf_dataurl = undefined;
-      var compile = function(source_code) {
-        var latex_code = "";
+        return `${day}/${month}/${year}`;
+    }
 
-                    var client = new XMLHttpRequest();
-                    client.open('GET', 'http://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex');
-                    client.onreadystatechange = function() {
-                        latex_code = client.responseText;
-                        // console.log(latex_code);
-                    }
-        console.log(source_code)
-        console.log("GAP!!")
-        console.log(latex_code)
-        document.getElementById("output").textContent = "";
-        //showLoadingIndicator(true);
-        window.location.href = "#running";
+    var generateLatex = function(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate) {
+        var latexVars = `\\newcommand{\\newname}{${newName}}` +
+                        `\\newcommand{\\oldname}{${oldName}}` +
+                        `\\newcommand{\\streetaddress}{${streetAddress}}` +
+                        `\\newcommand{\\city}{${city}}` +
+                        `\\newcommand{\\postcode}{${postCode}}` +
+                        `\\newcommand{\\county}{${county}}` +
+                        `\\newcommand{\\worddate}{${textDate}}` +
+                        `\\newcommand{\\numberdate}{${numberDate}}`;
+        console.log(latexVars);
 
-        var pdftex = new PDFTeX();
-        pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
-          pdftex.FS_createLazyFile('/', 'snowden.jpg', 'snowden.jpg', true, true);
+        var latexCode = "";
+        var client = new XMLHttpRequest();
+        client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
+        client.send(null);
+        if (client.status === 200) {
+          latexCode = client.responseText;
+        }
 
-          // pdftex.on_stdout = appendOutput;
-          // pdftex.on_stderr = appendOutput;
+        latexCode.concat(latexVars, latexCode);
+        console.log(latexCode);
 
-          console.time("Execution time");
+    }
 
-          pdftex.compile(latex_code).then(function(pdf_dataurl) {
-            console.timeEnd("Execution time");
+    var pdf_dataurl = undefined;
 
-            //showLoadingIndicator(false);
+    var compile = function(source_code) {
+      var latex_code = "";
 
-            if (pdf_dataurl === false)
-              return;
-
-            window.open(pdf_dataurl);
-            //showOpenButton(true);
-            window.location.href = "#open_pdf";
-            document.getElementById("open_pdf_btn").focus();
-          });
-        });
+      var client = new XMLHttpRequest();
+      client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
+      client.send(null);
+      if (client.status === 200) {
+          latex_code = client.responseText;
       }
+      // console.log(source_code);
+      // console.log("GAP!!");
+      // console.log(latex_code);
 
-      document.getElementById("compile").addEventListener("click", function(e) {
-        var source_code = document.getElementById("input").value;
-        compile(source_code);
+      source_code = latex_code;
+
+      var pdftex = new PDFTeX();
+      pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
+
+        pdftex.compile(source_code).then(function(pdf_dataurl) {
+          window.open(pdf_dataurl);
+        });
       });
+    }
 
-      document.getElementById("open_pdf_btn").addEventListener("click", function(e) {
-        window.open(pdf_dataurl);
-        e.preventDefault();
-      });
+    document.getElementById("submit").addEventListener("click", function(e) {
+      var oldName = document.getElementById("oldName").value;
+      var newName = document.getElementById("newName").value;
+      var streetAddress = document.getElementById("streetAddress").value;
+      var county = document.getElementById("county").value;
+      var date = new Date(document.getElementById("date").value);
+      var postCode = document.getElementById("postcode").value;
+      var city = document.getElementById("city").value;
 
-      var pdftex_preload = new PDFTeX("pdftex-worker.js");
-      pdftex_preload = undefined;
+      var numberDate = parseDate(date);
+      var textDate = parseTextDate(date);
+      var source_latex = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
+      var source_latex = "";
+      compile(source_latex);
+    });
+
+    var pdftex_preload = new PDFTeX("pdftex-worker.js");
+    pdftex_preload = undefined;
     </script>
 
-    <!-- <script src="https://togetherjs.com/togetherjs-min.js"></script> -->
   </body>
 </html>
