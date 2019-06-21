@@ -183,16 +183,15 @@
     }
 
     var generateLatex = function(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate) {
-        var latexVars = `\\newcommand{\\newname}{${newName}}` +
-                        `\\newcommand{\\oldname}{${oldName}}` +
-                        `\\newcommand{\\streetaddress}{${streetAddress}}` +
-                        `\\newcommand{\\city}{${city}}` +
-                        `\\newcommand{\\postcode}{${postCode}}` +
-                        `\\newcommand{\\county}{${county}}` +
-                        `\\newcommand{\\worddate}{${textDate}}` +
-                        `\\newcommand{\\numberdate}{${numberDate}}`;
-        console.log(latexVars);
-        
+        var latexVars = `\\newcommand{\\newname}{${newName}}\n` +
+                        `\\newcommand{\\oldname}{${oldName}}\n` +
+                        `\\newcommand{\\streetaddress}{${streetAddress}}\n` +
+                        `\\newcommand{\\city}{${city}}\n` +
+                        `\\newcommand{\\postcode}{${postCode}}\n` +
+                        `\\newcommand{\\county}{${county}}\n` +
+                        `\\newcommand{\\worddate}{${textDate}}\n` +
+                        `\\newcommand{\\numberdate}{${numberDate}}\n`;
+                        
 
         var latexCode = "";
         var client = new XMLHttpRequest();
@@ -201,33 +200,22 @@
         if (client.status === 200) {
           latexCode = client.responseText;
         }
-
-        latexCode.concat(latexVars, latexCode);
-        console.log(latexCode);
+        var latexConcat = "";
+        latexConcat += latexVars;
+        latexConcat += latexCode;
+        console.log(latexConcat);
+        return latexConcat;
 
     }
 
     var pdf_dataurl = undefined;
 
-    var compile = function(source_code) {
-      var latex_code = "";
-
-      var client = new XMLHttpRequest();
-      client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
-      client.send(null);
-      if (client.status === 200) {
-          latex_code = client.responseText;
-      }
-      // console.log(source_code);
-      // console.log("GAP!!");
-      // console.log(latex_code);
-
-      source_code = latex_code;
+    var compile = function(latexCode) {
 
       var pdftex = new PDFTeX();
       pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
 
-        pdftex.compile(source_code).then(function(pdf_dataurl) {
+        pdftex.compile(latexCode).then(function(pdf_dataurl) {
           window.open(pdf_dataurl);
         });
       });
@@ -244,9 +232,8 @@
 
       var numberDate = parseDate(date);
       var textDate = parseTextDate(date);
-      var source_latex = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
-      var source_latex = "";
-      compile(source_latex);
+      var latexCode = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
+      compile(latexCode);
     });
 
     var pdftex_preload = new PDFTeX("pdftex-worker.js");
