@@ -100,15 +100,15 @@
     <div class="container">
       <h1>Deedpol Generator</h1>
       <p>Enter your details and press generate to create your deedpol</p>
-      <!-- <form id="subjectDetails"  onsubmit="return loadVars()"> -->
-      <form id="subjectDetails">
-          Old name: <br><input type="text" id="oldName"><br>
-          New name: <br><input type="text" id="newName"><br>
-          Street Address: <br><input type="text" id="streetAddress"><br>
-          City: <br><input type="text" id="city"><br>
-          County: <br><input type="text" id="county"><br>
-          Postcode: <br><input type="text" id="postcode"><br>
-          Date: <br><input type="date" id="date"><br>
+      <form id="subjectDetails"  onsubmit="return loadVars()">
+      <!-- <form id="subjectDetails"> -->
+          Old name: <br><input type="text" id="oldName" required><br>
+          New name: <br><input type="text" id="newName" required><br>
+          Street Address: <br><input type="text" id="streetAddress" required><br>
+          City: <br><input type="text" id="city" required><br>
+          County: <br><input type="text" id="county" required><br>
+          Postcode: <br><input type="text" id="postcode" required><br>
+          Date: <br><input type="date" id="date" required><br>
       <input type="submit" value="Submit" id="submit">
       </form>
 
@@ -211,19 +211,20 @@
     var pdf_dataurl = undefined;
 
     var compile = function(latexCode) {
-
+        
       var pdftex = new PDFTeX();
       pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
 
         pdftex.compile(latexCode).then(function(pdf_dataurl) {
           window.open(pdf_dataurl);
+          e.preventDefault();
         });
       });
     }
 
-    document.getElementById("submit").addEventListener("click", function(e) {
-      var oldName = document.getElementById("oldName").value;
-      var newName = document.getElementById("newName").value;
+    function loadVars(){
+      var oldName = document.getElementById("oldName").value.toUpperCase();
+      var newName = document.getElementById("newName").value.toUpperCase();
       var streetAddress = document.getElementById("streetAddress").value;
       var county = document.getElementById("county").value;
       var date = new Date(document.getElementById("date").value);
@@ -234,7 +235,7 @@
       var textDate = parseTextDate(date);
       var latexCode = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
       compile(latexCode);
-    });
+    }
 
     var pdftex_preload = new PDFTeX("pdftex-worker.js");
     pdftex_preload = undefined;
