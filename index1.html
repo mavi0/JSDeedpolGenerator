@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+        <title>Deedpol Generator</title>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1"/> 
+        <meta name="viewport" content="width=device-width" />
+        <style>
+
+            @import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed&display=swap');
+
+            ::-moz-selection {
+                background: #b3d4fc;
+                text-shadow: none;
+            }
+
+            ::selection {
+                background: #b3d4fc;
+                text-shadow: none;
+            }
+
+            html {
+                padding: 30px 10px;
+                font-size: 20px;
+                line-height: 1.4;
+                color: #737373;
+                background: #ecf0f1;
+            }
+
+            html {
+                padding: 30px 10px;
+                font-size: 20px;
+                color: #737373;
+                background: #ecf0f1;
+            }
+
+            body {
+                max-width: 500px;
+                _width: 500px;
+                padding: 30px 20px 50px;
+                border: 1px solid #b3b3b3;
+                border-radius: 4px;
+                margin: 0 auto;
+                box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+                background: #fcfcfc;
+            }
+
+            h1 {
+                margin: 0 10px;
+                font-size: 50px;
+                text-align: center;
+                font-family: 'Roboto Condensed', sans-serif;
+            }
+
+            h3 {
+                margin: 1.5em 0 0.5em;
+            }
+
+            p {
+                margin: 1em 0;
+                font-family: 'Roboto', sans-serif;
+                text-align: left;
+                font-size: 20px;
+            }
+
+            ul {
+                padding: 0 0 0 40px;
+                margin: 1em 0;
+            }
+
+            a {
+                text-align: center;
+                color: #d64937;
+            }
+
+            a:hover{
+                color: #bbb;
+            }
+
+            .container {
+                max-width: 400px;
+                _width: 380px;
+                margin: 0 auto;
+            }
+
+            #subjectDetails {
+                font-family: 'Roboto', sans-serif;
+                text-align: left;
+                font-size: 20px;
+            }
+
+        </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+
+  <body>
+    <script src="promisejs/promise.js"></script>
+    <script src="pdftex.js"></script>
+
+    <div class="container">
+      <h1>Deedpol Generator</h1>
+      <p>Enter your details and press generate to create your deedpol</p>
+      <form id="subjectDetails"  onsubmit="return loadVars()">
+      <!-- <form id="subjectDetails"> -->
+          Old name: <br><input type="text" id="oldName" required><br>
+          New name: <br><input type="text" id="newName" required><br>
+          Street Address: <br><input type="text" id="streetAddress" required><br>
+          City: <br><input type="text" id="city" required><br>
+          County: <br><input type="text" id="county" required><br>
+          Postcode: <br><input type="text" id="postcode" required><br>
+          Date: <br><input type="date" id="date" required><br>
+      <input type="submit" value="Submit" id="submit">
+      </form>
+      <div class="tab" id="tab_open_pdf" style="display: none">
+        <button id="open_pdf_btn">Open your PDF</button>
+    </div>
+
+  </div>
+    <script>
+      var visibilityChanger = function(element_id) {
+        return function(visible) {
+          document.getElementById(element_id).style.display = visible ? 'block' : 'none';
+        }
+      }
+
+    //   var showLoadingIndicator = visibilityChanger("running")
+      var showOpenButton = visibilityChanger("tab_open_pdf")
+
+      var appendOutput = function(msg) {
+        // var output = document.getElementById("output");
+
+        // var content = output.textContent;
+
+        // output.textContent = content + "\r\n" + msg;
+
+        // output.scrollTop = 999999;
+        console.log(msg);
+      }
+
+      var pdf_dataurl = undefined;
+      var compile = function(source_code) {
+        // document.getElementById("output").textContent = "";
+        // showLoadingIndicator(true);
+        window.location.href = "#running";
+
+        var pdftex = new PDFTeX();
+        pdftex.set_TOTAL_MEMORY(80*1024*1024).then(function() {
+          pdftex.FS_createLazyFile('/', 'snowden.jpg', 'snowden.jpg', true, true);
+
+          pdftex.on_stdout = appendOutput;
+          pdftex.on_stderr = appendOutput;
+
+          console.time("Execution time");
+
+          var client = new XMLHttpRequest();
+          client.open('GET', 'https://raw.githubusercontent.com/mavi0/deedpol-template/master/main.tex', false);
+          client.send(null);
+          if (client.status === 200) {
+              latex_code = client.responseText;
+          }
+        //   console.log(source_code);
+        //   console.log("GAP!!");
+        //   console.log(latex_code);
+
+          source_code = latex_code;
+
+          pdftex.compile(source_code).then(function(pdf_dataurl) {
+            console.timeEnd("Execution time");
+
+            // showLoadingIndicator(false);
+
+            if (pdf_dataurl === false)
+              return;
+
+            showOpenButton(true);
+            window.location.href = "#open_pdf";
+            document.getElementById("open_pdf_btn").focus();
+          });
+        });
+      }
+
+    //   function loadVars(){
+    //     var oldName = document.getElementById("oldName").value.toUpperCase();
+    //     var newName = document.getElementById("newName").value.toUpperCase();
+    //     var streetAddress = document.getElementById("streetAddress").value;
+    //     var county = document.getElementById("county").value;
+    //     var date = new Date(document.getElementById("date").value);
+    //     var postCode = document.getElementById("postcode").value;
+    //     var city = document.getElementById("city").value;
+
+    //     var numberDate = parseDate(date);
+    //     var textDate = parseTextDate(date);
+    //     var latexCode = generateLatex(oldName, newName, streetAddress, county, city, postCode, numberDate, textDate);
+    //     compile(latexCode);
+    //     }
+
+      document.getElementById("submit").addEventListener("click", function(e) {
+        // var source_code = document.getElementById("input").value;
+        var source_code = "";
+        compile(source_code);
+      });
+
+      document.getElementById("open_pdf_btn").addEventListener("click", function(e) {
+        window.open(pdf_dataurl);
+        e.preventDefault();
+      });
+
+      var pdftex_preload = new PDFTeX("pdftex-worker.js");
+      pdftex_preload = undefined;
+    </script>
+
+  </body>
+</html>
