@@ -8,4 +8,4 @@ This project is based on [texlive.js](https://github.com/manuels/texlive.js).
 
 --------------
 
-This project has been abandoned as texlive.js is only compatible with FireFox
+**This project has been abandoned as texlive.js is only compatible with FireFox**
